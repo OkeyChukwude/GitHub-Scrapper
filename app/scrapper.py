@@ -52,6 +52,3 @@ def get_repo_details(repo):
         repo_details['language color'] = language_color['style'].split('background-color: ')[1]
 
     return repo_details
-
-if __name__ == '__main__':
-    print(scrapper('habeeb'))
