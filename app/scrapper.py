@@ -10,11 +10,11 @@ def scrapper(github_username):
         
         # Check if username exist
         if (html.get_text() == 'Not Found'): 
-            return 'Not Found'
+            return {'message': 'Username not found'}
         
-        avatar_url = html.find('img', {'alt': 'Avatar'})['src']
-        name = html.find('span', {'class': 'p-name'}).get_text().strip()
-        num_of_repos = html.find('span', {'class': 'Counter'}).get_text()
+        avatar_url = html.find('img', attrs = {'alt': 'Avatar'})['src']
+        name = html.find('span', attrs = {'class': 'p-name'}).get_text().strip()
+        num_of_repos = html.find('span', attrs = {'class': 'Counter'}).get_text()
         followers = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=followers'}).span.get_text().strip()
         following = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=following'}).span.get_text().strip()
         stared = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=stars'}).span.get_text().strip()
@@ -23,10 +23,13 @@ def scrapper(github_username):
         for repo in html.find('ol').find_all('li'):
             popular_repos.append(get_repo_details(repo))
             
-        return {'avatar_url': avatar_url, 'name': name, 'num_of_repos': num_of_repos, 'followers': followers, 'following': following, 'stared': stared, 'popular_repos': popular_repos}
+        return {'message': 'success', 'data': {'avatar_url': avatar_url, 'name': name, 'num_of_repos': num_of_repos, 'followers': followers, 'following': following, 'stared': stared, 'popular_repos': popular_repos}}
     
     except requests.exceptions.RequestException as e:
-        return  {'message': 'An error occured please try again!!'}  
+        return  {'message': 'An error occured please try again!!'} 
+
+    except AttributeError:
+        return {'message': "Couldn't get details, kindly check the username and try again!! Username is case sensitive."}
 
 
 def get_repo_details(repo):
