@@ -12,12 +12,13 @@ def scrapper(github_username):
         if (html.get_text() == 'Not Found'): 
             return {'message': 'Username not found'}
         
+        username = html.find('span', attrs= {'itemprop': 'additionalName'}).get_text().strip()
         avatar_url = html.find('img', attrs = {'alt': 'Avatar'})['src']
         name = html.find('span', attrs = {'class': 'p-name'}).get_text().strip()
         num_of_repos = html.find('span', attrs = {'class': 'Counter'}).get_text()
-        followers = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=followers'}).span.get_text().strip()
-        following = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=following'}).span.get_text().strip()
-        stared = html.find('a', attrs = {'href': f'https://github.com/{github_username}?tab=stars'}).span.get_text().strip()
+        followers = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=followers'}).span.get_text().strip()
+        following = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=following'}).span.get_text().strip()
+        stared = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=stars'}).span.get_text().strip()
         popular_repos = []
 
         for repo in html.find('ol').find_all('li'):
@@ -36,7 +37,7 @@ def get_repo_details(repo):
     repo_details = {}
     repo_details['name'] = repo.a.span.text
     repo_details['href'] = repo.a['href']
-    repo_details['repo status'] = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle'}).get_text()
+    repo_details['repo status'] = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle ml-1 mb-1'}).get_text()
    
 
     forked_from = repo.find('p', attrs = {'class': 'color-text-secondary text-small mb-2'})

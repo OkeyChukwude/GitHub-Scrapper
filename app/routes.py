@@ -15,6 +15,8 @@ def scrape(username):
     if username == '':
         abort(400)
 
-    data = scrapper(username)
+    scrapper_response = scrapper(username)
+    if (scrapper_response.message == 'success'):
+        return jsonify(scrapper_response.data)
     
-    return jsonify(data)
+    return jsonify(scrapper_response.message)
