@@ -8,7 +8,7 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home.html')
 
 @app.route('/scrapper/<string:username>', methods=['GET'])
 def scrape(username):
