@@ -1,4 +1,8 @@
-const path = window.location.href
+const form = document.querySelector('form')
+const button = document.getElementById('btn')
+const alertMsg = document.getElementById('alert')
+const html = document.getElementsByTagName('html')[0]
+const scrappedDataEle = document.querySelector('.scrapped-data')
 
 async function getScrappedData(username) {
     const response = await fetch(`/scrapper/${username}`, {
