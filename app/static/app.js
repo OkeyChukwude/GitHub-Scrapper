@@ -30,7 +30,13 @@ function setScrappedValue(data) {
     following.textContent = data.following
     starred.textContent = data.starred
     repo.textContent = data.num_of_repos
-    
+    console.log(data.popular_repos)
+
+    //Make repo list visible
+    document.querySelector('#one').style.visibility = 'visible'
+    document.querySelector('#two').style.visibility = 'visible'
+    document.querySelector('#three').style.visibility = 'visible'
+
     if (data.popular_repos.length >= 3) {
         let count = 1
         for (let repo of data.popular_repos) {
@@ -69,61 +75,78 @@ function setScrappedValue(data) {
     }
 
     if (data.popular_repos.length === 2) {
+        let count = 1
         for (let repo of data.popular_repos) {
-            let count = 1
             document.querySelector(`#repo-name-${count}`).textContent = repo.name
             document.querySelector(`#repo-name-${count}`).href = `https://github.com${repo.name}`
             document.querySelector(`#status-${count}`).textContent = repo.repo_status
 
             if ('language' in repo) {
                 document.querySelector(`#repo-lang-${count}`).textContent = repo.language
-                document.querySelector(`#lang-color-${count}`).style.backgroungColor = repo.language_color
+                document.querySelector(`#lang-color-${count}`).style.backgroundColor = repo.language_color
+                document.querySelector(`#lang-color-${count}`).style.visibility = 'visible'
+            } else {
+                document.querySelector(`#lang-color-${count}`).style.visibility = 'hidden'
+                document.querySelector(`#repo-lang-${count}`).textContent = ' '
             }
             
             if ('forked_from' in repo) {
                 document.querySelector(`#forked-from-${count}`).innerHTML = `Forked from <a href="https://www.github.com/${repo.forked_from}">${repo.forked_from}</a>`
-            }
+            } else {
+                document.querySelector(`#forked-from-${count}`).innerHTML = ' '
+            } 
 
             if ('description' in repo) {
                 document.querySelector(`#description-${count}`).textContent = repo.description
+            } else {
+                document.querySelector(`#description-${count}`).textContent = ' '
             }
-            count++
+            count += 1
             if (count > 2) {
-                document.querySelector('#three').remove()
+                document.querySelector('#three').style.visibility = 'hidden'
                 break
             }
         }
     }
 
     if (data.popular_repos.length === 1) {
+        let count = 1
         for (let repo of data.popular_repos.reverse) {
-            let count = 1
             document.querySelector(`#repo-name-${count}`).textContent = repo.name
             document.querySelector(`#repo-name-${count}`).href = `https://github.com${repo.name}`
             document.querySelector(`#status-${count}`).textContent = repo.repo_status
 
             if ('language' in repo) {
                 document.querySelector(`#repo-lang-${count}`).textContent = repo.language
-                document.querySelector(`#lang-color-${count}`).style.backgroungColor = repo.language_color
+                document.querySelector(`#lang-color-${count}`).style.backgroundColor = repo.language_color
+                document.querySelector(`#lang-color-${count}`).style.visibility = 'visible'
+            } else {
+                document.querySelector(`#lang-color-${count}`).style.visibility = 'hidden'
+                document.querySelector(`#repo-lang-${count}`).textContent = ' '
             }
             
             if ('forked_from' in repo) {
                 document.querySelector(`#forked-from-${count}`).innerHTML = `Forked from <a href="https://www.github.com/${repo.forked_from}">${repo.forked_from}</a>`
-            }
+            } else {
+                document.querySelector(`#forked-from-${count}`).innerHTML = ' '
+            } 
 
             if ('description' in repo) {
                 document.querySelector(`#description-${count}`).textContent = repo.description
+            } else {
+                document.querySelector(`#description-${count}`).textContent = ' '
             }
-            count++
+
+            count += 1
             if (count > 1) {
-                document.querySelector('#two').remove()
-                document.querySelector('#three').remove()
+                document.querySelector('#two').style.visibility = 'hidden'
+                document.querySelector('#three').style.visibility = 'hidden'.remove()
                 break
             }
         }
     }
 
-    if (data.popular_repos.length = 0) {
+    if (data.popular_repos.length === 0) {
         document.querySelector('#two').remove()
         document.querySelector('#two').remove()
         document.querySelector('#three').remove()
