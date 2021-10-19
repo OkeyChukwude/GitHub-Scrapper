@@ -1,6 +1,6 @@
 const form = document.querySelector('form')
 const button = document.getElementById('btn')
-const alertMsg = document.getElementById('alert')
+const alertMsg = document.querySelector('.alert')
 const html = document.getElementsByTagName('html')[0]
 const scrappedDataEle = document.querySelector('.scrapped-data')
 
@@ -164,19 +164,19 @@ function displayData(data) {
     if (data === 'An error occured please try again!!') {
         const message = document.getElementById('message')
         message.innerText = data
-        alertMsg.style.display = 'inline-block'
+        alertMsg.style.visibility = 'visible'
         return
     }
 
     if (data === 'Username not found') {
         const message = document.getElementById('message')
         message.innerText = data
-        alertMsg.style.display = 'block'
+        alertMsg.style.visibility = 'visible'
         return
     }
     
     setScrappedValue(data)
-    html.style.height = '17%'
+    html.style.height = '27%'
     scrappedDataEle.classList.remove('hide-scrapped-data')
 
     
@@ -184,7 +184,7 @@ function displayData(data) {
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    alertMsg.style.display = 'none'
+    alertMsg.style.visibility = 'hidden'
 
     const username = document.getElementById('username').value
     button.disabled = true

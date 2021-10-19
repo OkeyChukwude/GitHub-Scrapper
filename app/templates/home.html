@@ -49,7 +49,7 @@
         }
 
         .hide-scrapped-data {
-            content-visibility: hidden;
+            visibility: hidden;
         }
 
         a {
@@ -62,19 +62,15 @@
 <body>
     <main id='formContainer'>
         <div class="form-search text-center">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" id='alert' style="display: none;">
-                <p id="message"></p>
-            </div>
+            <span id="message" class="alert alert-danger" role="alert" style="visibility: hidden; display: inline-block;"></span>
             <form action="">
                 <h1 class="h3 mb-4 fw-normal" > <i class="bi-github" role="img" aria-label="GitHub"></i> GitHub Scrapper</h1>
-    
                 <div class="row row-cols d-flex align-items-center">
                     <div class="input-group mb-3 has-validation">
                         <span class="input-group-text" id="addon-wrapping">@</span>
                         <input type="text" class="form-control" id="username" placeholder="GitHub username" required>
                         <button id="btn" class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-                    </div>
-                                     
+                    </div>              
                 </div>
             </form>
         </div>
