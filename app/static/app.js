@@ -21,18 +21,25 @@ function setScrappedValue(data) {
     const followers = document.querySelector('#followers')
     const following = document.querySelector('#following')
     const starred = document.querySelector('#starred')
-    const repo = document.querySelector('#repo')
+    const numOfRepo = document.querySelector('#num-of-repo')
 
     avatar.src = data.avatar_url
     name.textContent = data.name
     username.textContent = data.username
-    followers.textContent = data.followers
-    following.textContent = data.following
-    starred.textContent = data.starred
-    repo.textContent = data.num_of_repos
-    console.log(data.popular_repos)
+    if (data.followers !== '') followers.textContent = data.followers
+    if (data.following !== '') following.textContent = data.following
+    if (data.starred !== '') starred.textContent = data.starred
+    numOfRepo.textContent = data.num_of_repos
+
+    if (typeof data.popular_repos === 'string') {
+        document.querySelector('.no-repo').textContent = `${data.popular_repos}`
+        document.querySelector('.popular-repo').style.visibility = 'hidden'
+        return
+    }
 
     //Make repo list visible
+    document.querySelector('.no-repo').style.visibility = 'hidden'
+    document.querySelector('.popular-repo').style.visibility = 'visible'
     document.querySelector('#one').style.visibility = 'visible'
     document.querySelector('#two').style.visibility = 'visible'
     document.querySelector('#three').style.visibility = 'visible'

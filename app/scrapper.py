@@ -12,18 +12,35 @@ def scrapper(github_username):
         if (html.get_text() == 'Not Found'): 
             return {'message': 'Username not found'}
         
-        # Get webpage detials
+        # Get Profile detials
         username = html.find('span', attrs= {'itemprop': 'additionalName'}).get_text().strip()
         avatar_url = html.find('img', attrs = {'alt': 'Avatar'})['src']
         name = html.find('span', attrs = {'class': 'p-name'}).get_text().strip()
         num_of_repos = html.find('span', attrs = {'class': 'Counter'}).get_text()
-        followers = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=followers'}).span.get_text().strip()
-        following = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=following'}).span.get_text().strip()
-        starred = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=stars'}).span.get_text().strip()
+
+        followers_tag = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=followers'})
+        following_tag = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=following'})
+        starred_tag = html.find('a', attrs = {'href': f'https://github.com/{username}?tab=stars'})
+
+        if (followers_tag):
+            followers = followers_tag.span.get_text().strip()
+        else: followers = ''
+        
+        if (following_tag):
+            following = following_tag.span.get_text().strip()
+        else: following = ''
+
+        if (starred_tag):
+            starred = starred_tag.span.get_text().strip()
+        else: starred = ''
+
         popular_repos = []
 
-        for repo in html.find('ol').find_all('li'):
-            popular_repos.append(get_repo_details(repo))
+        if html.find('div', attrs = {'class': 'blankslate mb-4'}):
+            popular_repos = f"{username} doesn't have any public repositories yet."
+        else:
+            for repo in html.find('ol').find_all('li'):
+                popular_repos.append(get_repo_details(repo))
             
         return {'message': 'success', 'data': {'avatar_url': avatar_url, 'name': name, 'username': username, 'num_of_repos': num_of_repos, 'followers': followers, 'following': following, 'starred': starred, 'popular_repos': popular_repos}}
     
@@ -33,7 +50,7 @@ def scrapper(github_username):
     except AttributeError as e:
         return  {'message': 'An error occured please try again!!', 'error': e} 
 
-# Get repo details from webpage
+# Get popular repo details
 def get_repo_details(repo):
     repo_details = {}
     repo_details['name'] = repo.a.span.text
@@ -43,6 +60,10 @@ def get_repo_details(repo):
 
     forked_from = repo.find('p', attrs = {'class': 'color-fg-muted text-small mb-2'})
     description = repo.find('p', attrs = {'class': 'pinned-item-desc color-fg-muted text-small d-block mt-2 mb-3'})
+    
+    if (not description):
+        description = repo.find('p', attrs = {'class': 'pinned-item-desc color-text-secondary text-small d-block mt-2 mb-3'})
+    
     language = repo.find('span', attrs = {'itemprop': 'programmingLanguage'})
     language_color = repo.find('span', attrs = {'class': 'repo-language-color'})
 
