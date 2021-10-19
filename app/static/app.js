@@ -27,13 +27,23 @@ function setScrappedValue(data) {
     name.textContent = data.name
     username.textContent = data.username
     if (data.followers !== '') followers.textContent = data.followers
+    else followers.textContent = 0
     if (data.following !== '') following.textContent = data.following
+    else following.textContent = 0
     if (data.starred !== '') starred.textContent = data.starred
+    else starred.textContent = 0
     numOfRepo.textContent = data.num_of_repos
 
     if (typeof data.popular_repos === 'string') {
+        document.querySelector('.no-repo').style.visibility = 'visible'
         document.querySelector('.no-repo').textContent = `${data.popular_repos}`
         document.querySelector('.popular-repo').style.visibility = 'hidden'
+        document.querySelector('#one').style.visibility = 'hidden'
+        document.querySelector('#two').style.visibility = 'hidden'
+        document.querySelector('#three').style.visibility = 'hidden'
+        document.querySelector(`#lang-color-1`).style.visibility = 'hidden'
+        document.querySelector(`#lang-color-2`).style.visibility = 'hidden'
+        document.querySelector(`#lang-color-3`).style.visibility = 'hidden'
         return
     }
 
