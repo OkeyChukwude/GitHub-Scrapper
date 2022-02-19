@@ -45,7 +45,7 @@ def scrapper(github_username):
         return {'message': 'success', 'data': {'avatar_url': avatar_url, 'name': name, 'username': username, 'num_of_repos': num_of_repos, 'followers': followers, 'following': following, 'starred': starred, 'popular_repos': popular_repos}}
     
     except requests.exceptions.RequestException as e:
-        return  {'message': 'An error occured please try again!!'} 
+        return  {'message': 'An error occured.\nCheck you network and try again!!'} 
 
     except AttributeError as e:
         return  {'message': 'An error occured please try again!!', 'error': e} 
@@ -55,7 +55,12 @@ def get_repo_details(repo):
     repo_details = {}
     repo_details['name'] = repo.a.span.text
     repo_details['href'] = repo.a['href']
-    repo_details['repo_status'] = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle ml-1'}).get_text()
+
+    # The two possible value of the class attribute holding repo status.
+    status1 = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle ml-1'})
+    status2 = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle mt-1 no-wrap v-align-baseline'})
+    
+    repo_details['repo_status'] =  status2.get_text() if status1 is None else status1.get_text()
    
 
     forked_from = repo.find('p', attrs = {'class': 'color-fg-muted text-small mb-2'})
