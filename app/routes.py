@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request, abort, make_response
+from flask import jsonify, request, abort, make_response
 from app import app
 from .scrapper import scrapper
 
@@ -8,7 +8,7 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    return app.send_static_file('home.html')
 
 @app.route('/scrapper/<string:username>', methods=['GET'])
 def scrape(username):
