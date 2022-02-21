@@ -8,7 +8,7 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    return app.send_static_file('home.html')
+    return app.send_static_file('index.html')
 
 @app.route('/scrapper/<string:username>', methods=['GET'])
 def scrape(username):
