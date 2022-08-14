@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as bs
 import requests
+import re
 
 def scrapper(github_username):
     try:
@@ -48,7 +49,7 @@ def scrapper(github_username):
         return  {'message': 'An error occured.\nCheck you network and try again!!'} 
 
     except AttributeError as e:
-        return  {'message': 'An error occured please try again!!', 'error': e} 
+        return  {'message': 'An error occured please try again!!', 'error': e}
 
 # Get popular repo details
 def get_repo_details(repo):
@@ -56,28 +57,22 @@ def get_repo_details(repo):
     repo_details['name'] = repo.a.span.text
     repo_details['href'] = repo.a['href']
 
-    # The two possible value of the class attribute holding repo status.
-    status1 = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle ml-1'})
-    status2 = repo.find('span', attrs = {'class': 'Label Label--secondary v-align-middle mt-1 no-wrap v-align-baseline'})
-    
-    repo_details['repo_status'] =  status2.get_text() if status1 is None else status1.get_text()
+    repo_status = repo.find_all('span', class_=re.compile('Label'))
+    repo_details['repo_status'] =  repo_status
    
-
     forked_from = repo.find('p', attrs = {'class': 'color-fg-muted text-small mb-2'})
-    description = repo.find('p', attrs = {'class': 'pinned-item-desc color-fg-muted text-small d-block mt-2 mb-3'})
-    
-    if (not description):
-        description = repo.find('p', attrs = {'class': 'pinned-item-desc color-text-secondary text-small d-block mt-2 mb-3'})
-    
-    language = repo.find('span', attrs = {'itemprop': 'programmingLanguage'})
-    language_color = repo.find('span', attrs = {'class': 'repo-language-color'})
-
     if (forked_from):
         repo_details['forked_from'] = forked_from.text.split('\n')[1].strip().split('Forked from ')[1]
+
+    description = repo.find('p', attrs = {'class': 'pinned-item-desc color-fg-muted text-small d-block mt-2 mb-3'})
+    if (not description):
+        description = repo.find('p', attrs = {'class': 'pinned-item-desc color-text-secondary text-small d-block mt-2 mb-3'})
 
     if (description and description.text.split('\n')[1].strip() != ''):
         repo_details['description'] = description.text.split('\n')[1].strip()
 
+    language = repo.find('span', attrs = {'itemprop': 'programmingLanguage'})
+    language_color = repo.find('span', attrs = {'class': 'repo-language-color'})
     if (language):
         repo_details['language'] = language.text
         repo_details['language_color'] = language_color['style'].split('background-color: ')[1]
