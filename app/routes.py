@@ -6,6 +6,10 @@ from .scrapper import scrapper
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
 @app.route('/scrapper/<string:username>', methods=['GET'])
 def scrape(username):
     if username == '':
