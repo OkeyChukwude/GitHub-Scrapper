@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request, abort, make_response
+from flask import jsonify, request, abort, make_response
 from app import app
 from .scrapper import scrapper
 
