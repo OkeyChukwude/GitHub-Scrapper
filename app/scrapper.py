@@ -57,8 +57,8 @@ def get_repo_details(repo):
     repo_details['name'] = repo.a.span.text
     repo_details['href'] = repo.a['href']
 
-    repo_status = repo.find_all('span', class_=re.compile('Label'))
-    repo_details['repo_status'] =  repo_status
+    repo_status = repo.find('span', class_=re.compile('Label'))
+    repo_details['repo_status'] =  repo_status.text
    
     forked_from = repo.find('p', attrs = {'class': 'color-fg-muted text-small mb-2'})
     if (forked_from):
